@@ -1,0 +1,25 @@
+{
+  "name": "restify-auth-concept",
+  "version": "1.0.0",
+  "description": "A concept for how restify routing can be used for permission enforcement.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eve-moon-developers/restify-auth-concept.git"
+  },
+  "author": "W. Craig Jones & MOON Alliance Developers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eve-moon-developers/restify-auth-concept/issues"
+  },
+  "homepage": "https://github.com/eve-moon-developers/restify-auth-concept#readme",
+  "dependencies": {
+    "require-uncached": "^1.0.3",
+    "restify": "^4.3.0",
+    "restify-router": "^0.4.1",
+    "yamljs": "^0.2.8"
+  }
+}

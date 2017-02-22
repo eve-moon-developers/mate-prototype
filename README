@@ -1,0 +1,35 @@
+This is a prototype of the Moon Alliance Tracking and Enhancements (MATE) tool. Later this would be broken into several repositories powered by the MATE Core, however for the demo it is all thrown together.
+
+The MATE Tool is a multithreaded NodeJS Cluster that handles authentication, ESI, and well a very large API. It is expected to have many subdomains as a consequence, however they all direct to different ports on this application.
+
+Guiding Principles:
+    1) Scalability backed by tiered statefullness and caching
+        * Data reliability is ordered as (least to most): client -> modules -> redis -> postgres -> configuration
+        * Modules are to be stateless between calls, except where caching is logical. (State can be passed if there is a handler chain.)
+        * Redis is to be considered highly volitile, and may be unavailable or cleared at any time.
+        * Postgres is to be considered stable, but cached when possible.
+        * Configuration and data files are to be considered absolutely true.
+    2) Fault Tolerance
+        * The MATE Tool should be designed to work with as many broken components as possible.
+        * Each component has a health endpoint that can be hit for details.
+            * The client should automatically disable components with a bad health endpoint.
+    3) Coherent Interface Design
+        * All of the tools should have the same style of interface, utilize the same user settings, and be easy to navigate.
+        * There should be no-subdomains.
+    4) Modular Code Design
+        * The MATE Tool should be broken into many sub-modules that all tie together.
+    
+
+Each major folder has a README file giving some more detail.
+
+MATE is broken into several major sections, with each getting at least 1 dedicated worker thread:
+    * Configuration, Data, Logging, and Administration (admin subdomain)
+        - Starts up the application.
+        - Handles configuration requests.
+        - Supplies the admin subdomain.
+    * API (api subdomain)
+        - Provides all of the api values for the subdomain. 
+    * Client (no subdomain)
+        - Hosts static files mostly, and handles some templating.
+        - This module facilities the MATE interface.
+    * 
