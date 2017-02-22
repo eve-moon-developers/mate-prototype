@@ -1,6 +1,7 @@
 This is a prototype of the Moon Alliance Tracking and Enhancements (MATE) tool. Later this would be broken into several repositories powered by the MATE Core, however for the demo it is all thrown together.
 
-The MATE Tool is a multithreaded NodeJS Cluster that handles authentication, ESI, and well a very large API. It is expected to have many subdomains as a consequence, however they all direct to different ports on this application.
+The MATE Tool is a multithreaded NodeJS Cluster that handles authentication, ESI, and well a very large API. 
+(*Maybe change*) It is expected to have many subdomains as a consequence, however they all direct to different ports on this application.
 
 Guiding Principles:
     1) Scalability backed by tiered statefullness and caching
@@ -13,23 +14,96 @@ Guiding Principles:
         * The MATE Tool should be designed to work with as many broken components as possible.
         * Each component has a health endpoint that can be hit for details.
             * The client should automatically disable components with a bad health endpoint.
-    3) Coherent Interface Design
+    3) Seperation of Concerns
+        * Avoid crosstalk wherever possible. The server shouldn't be concerned with the client or vice versa.
+    4) Coherent Interface Design
         * All of the tools should have the same style of interface, utilize the same user settings, and be easy to navigate.
         * There should be no-subdomains.
-    4) Modular Code Design
+    5) Modular Code Design
         * The MATE Tool should be broken into many sub-modules that all tie together.
-    
+    6) Consistent Error Handling
+    7) Consistent Use of Promises
 
 Each major folder has a README file giving some more detail.
 
-MATE is broken into several major sections, with each getting at least 1 dedicated worker thread:
-    * Configuration, Data, Logging, and Administration (admin subdomain)
-        - Starts up the application.
-        - Handles configuration requests.
-        - Supplies the admin subdomain.
+MATE is broken into several major sections:
+    * Server (single dedicated thread)
+        - Starts up the application
+        - Handles configuration requests
+        - Handles a backend message system for all threads.
+        - Handles logging
+    * Admin (admin subdomain)
+        - Handles a special admin subdmain
+        - Can modify logging. 
     * API (api subdomain)
         - Provides all of the api values for the subdomain. 
     * Client (no subdomain)
         - Hosts static files mostly, and handles some templating.
         - This module facilities the MATE interface.
-    * 
+
+
+Rules and Styles:
+    * Utilize Google Style Guides where possible
+    * Filenames are all lowercase snake_case except for special files. (README, INSTALLATION)
+    * Configuration files are "js" that export an object to allow for comments.
+    * Further style guides can be found in other README files.
+
+Essential Components:
+    Server:
+        restify
+            - Supplies a fast wrapper around node html servers focused on RESTful APIs.
+        restify-router 
+            - Enables "sub-module" style routing for restify and facilitates middleware.
+        require-uncached
+            - Enables dyanmic reloading of API elements.
+        underscore
+            - Provides some quality of life improvements.
+        util
+            -Provides some logging improvements.
+        handlebars
+            - Handles templating for client html.
+        collections
+            - Supplies a few important collection classes.
+        node-cache
+            - Supplies a simple caching class.
+        pg
+            - Supplies the postgres interface
+        redis
+            - Supplies the redis interface.
+        yamljs
+            - Parses the static data export from EVE Online.
+
+    Client:
+        jQuery
+            - Facilitates DOM manipulation and queries.
+        angularjs
+            - Facilitates MVC population in the client.
+        requirejs
+            - Handles the loading of html and javascript files in the browser.
+        bootstrap4
+            - CSS Framework for the client
+            - Users should be able to switch between multiple bootswatch themes (darkly, cyborg, slate, lux, litera, sandstone);
+        
+
+Folder Breakdown:
+    /admin:
+        Contains files relevant to the admin panel. Should have it's own set of static and template files. Will utilize the API though.
+    /api:
+        Contains all the server endpoints.
+        /api/index.html with a valid endpoint should display a list of all of the endpoints, descriptions, and details.
+    /client:
+        Contains files relevant to the browser.
+    /config:
+        Contains files relevant to the configuration of MATE.
+        MATE configuration will later be loaded from the local redis server.
+    /core:
+        Contains files required for the running of the MATE server itself.
+        This can be thought of as the most secure and restricted area of the source code.
+    /data:
+        Contains static data for the server to utilize in processing.
+    /server:
+        Contains shared scripts, scheduled processes, or other serverside code.
+    /setup:
+        Contains scripts which setup the database, as well as patches to more up to date databases.
+    /node_modules:
+        Contains the node modules.

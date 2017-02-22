@@ -4,7 +4,8 @@
   "description": "A concept for how restify routing can be used for permission enforcement.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_PATH=. node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,16 @@
   },
   "homepage": "https://github.com/eve-moon-developers/restify-auth-concept#readme",
   "dependencies": {
+    "collections": "^5.0.6",
+    "handlebars": "^4.0.6",
+    "node-cache": "^4.1.1",
+    "pg": "^6.1.2",
+    "redis": "^2.6.5",
     "require-uncached": "^1.0.3",
     "restify": "^4.3.0",
     "restify-router": "^0.4.1",
+    "underscore": "^1.8.3",
+    "util": "^0.10.3",
     "yamljs": "^0.2.8"
   }
 }
